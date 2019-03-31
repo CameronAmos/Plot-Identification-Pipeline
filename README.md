@@ -1,4 +1,17 @@
-# Plot-Identification-Pipeline
+# Plot Identification Pipeline
+
+This image processing pipeline is designed isolation of compact, accurate images of cultivars in a micro-plot field for use in high-throughtput deep-learning-assisted phenotyping. Raw data is collected using a high-resolution camera mounted on a low-astitude UAV guided by gps markers. 
+
+## Features / Summary of Files
+### 4 distinct python files are employed during the pipeline, listed in order of use
+
+- dngConversion.py: After an mp4 file of a pass down the microplot has been converted to .dng files at a certain fps, this python script simply converts themn to .jpg. The old .dng files may be moved to a local file for readability if desired.
+
+- boundaryTest.py: Processes each image (through a process detailed below) and rates them according to where the position of the alleyway is relative to a micro-plot. These findings are stored in CanopyCoverRate.csv.
+
+- canopyBPFilter.py: Utilizes CanopyCoverRate.csv to select .jpg files that are directly over the microplot, and show as little amount of the alleyway between the microplots as possible. These results are ouputted into peaks.csv. __NOTE:__ The variable 'similar_threshold' is a variable that is used in the script to determine if to hits are recording the same or different microplot. This variable *MUST* be manually set, as flight speed, the fps used to create the .dng files, as well as microplot dimensions all factor into this length. To find the the value of the variable 'similar_threshold', simply find 2 images that are centered above adjacent microplots and take the number of images between them divided by 2. 
+
+- plotMatch.py: Crops 6 images centered horizontally inside each image specified in peaks.csv for use in deep learning algorithms. These images are stored in a folder labeled 'cropped'.
 
 The CanopyFilter interprets the peaks of the wavelength generated from how much green there is in the middle of the image. A peak therefore can be assumed to be the location of an image that is directly over a microplot. There are two formulas that generate two different waveforms, and the position data from these peaks are averaged if non-unique and inserted if unique into a merged peaks list.
 
